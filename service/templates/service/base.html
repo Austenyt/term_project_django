@@ -19,16 +19,14 @@
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
                     <h4 class="text-white">О нас</h4>
-                    <p class="text-muted">We're there for you to make your life even better! Stick around to check out
-                        our
-                        best discounts and giveaways!</p>
+                    <p class="text-muted">Сервис рассылок</p>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Меню</h4>
                     <ul class="list-unstyled">
                         <li><a href="{% url 'goods:index' %}" class="text-white">Главная</a></li>
                         <li><a href="{% url 'goods:contacts' %}" class="text-white">Контакты</a></li>
-                        <li><a href="{% url 'goods:category_list' %}" class="text-white">Категории</a></li>
+                        <li><a href="{% url 'goods:category_list' %}" class="text-white">Рассылки</a></li>
                         <li><a href="{% url 'goods:blog_list' %}" class="text-white">Блог</a></li>
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'users:profile' %}" class="text-white">Профиль</a></li>

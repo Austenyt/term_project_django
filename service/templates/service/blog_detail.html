@@ -1,0 +1,29 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+<div class="col-12">
+    <div class="row">
+
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Статья "{{ object.title }}" ({{ object.slug }})
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{ object.body }}
+                    </p>
+
+                </div>
+                <div class="card-footer"></div>
+                    Просмотры: {{ object.views_count }}
+            </div>
+        </div>
+        <div class="col-6">
+            <img src="/media/{{ object.preview }}"/>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'service/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="product-card">
+    <img src="{% mymedia product.image %}">
+    <p>{{ message.subject }}</p>
+    <h2>{{ message.body }}</h2>
+    <div class="card-footer"></div>
+</div>
+{% endblock %}

@@ -1,13 +1,26 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.urls import reverse_lazy
 from .models import Mailing
 from .forms import MailingForm
 
 
+class IndexView(TemplateView):  # Главная страница
+    template_name = 'service/index.html'
+    extra_context = {
+        'title': 'Сервис отправки сообщений в рассылке'
+    }
+
+
 class MailingListView(ListView):
     model = Mailing
-    template_name = 'mailing_list.html'
+    template_name = 'message_list.html'
     context_object_name = 'mailings'
+
+
+class MailingDetailView(DetailView):
+    model = Mailing
+    template_name = 'mailing_detail.html'
+    context_object_name = 'mailing'
 
 
 class MailingCreateView(CreateView):
