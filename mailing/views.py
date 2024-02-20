@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.urls import reverse_lazy
 from .models import Mailing
@@ -5,10 +7,25 @@ from .forms import MailingForm
 
 
 class IndexView(TemplateView):  # Главная страница
-    template_name = 'service/index.html'
+    template_name = 'mailing/index.html'
     extra_context = {
         'title': 'Сервис отправки сообщений в рассылке'
     }
+
+
+class ContactsView(View):
+    template_name = 'goods/contacts.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'title': 'Контакты'})
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        print(f'{name} ({email}): {message}')
+
+        return render(request, self.template_name, {'title': 'Контакты'})
 
 
 class MailingListView(ListView):

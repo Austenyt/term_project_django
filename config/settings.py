@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'mailing',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +79,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'service',
+        'NAME': 'mailing',
         'USER': 'postgres',
         'PASSWORD': '12345'
     }
