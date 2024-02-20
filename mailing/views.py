@@ -30,7 +30,7 @@ class ContactsView(View):
 
 class MailingListView(ListView):
     model = Mailing
-    template_name = 'message_list.html'
+    template_name = 'mailing_list.html'
     context_object_name = 'mailings'
 
 

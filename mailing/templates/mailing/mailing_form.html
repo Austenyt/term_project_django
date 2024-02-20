@@ -1,4 +1,4 @@
-{% extends 'service/base.html' %}
+{% extends 'mailing/base.html' %}
 
 {% block content %}
 <form method="post" class="uniForm">
@@ -7,9 +7,9 @@
             <div class="card">
                 <div class="card-header">
                     {% if object %}
-                    Редактирование сообщения
+                    Редактирование рассылки
                     {% else %}
-                    Добавление сообщения
+                    Добавление рассылки
                     {% endif %}
                 </div>
                 <div class="card-body">

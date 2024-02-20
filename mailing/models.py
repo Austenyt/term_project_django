@@ -23,6 +23,7 @@ class Mailing(models.Model):
         ('month', 'Раз в месяц'),
     )
 
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Клиент')
     time = models.TimeField(verbose_name='Время рассылки')
     frequency = models.CharField(max_length=5, choices=TIME_CHOICES, verbose_name='Периодичность')
     status = models.CharField(max_length=10, default='создана', verbose_name='Статус рассылки')
