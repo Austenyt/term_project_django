@@ -1,0 +1,27 @@
+Blog.object.order_by('?')[:3] # для случайной выборки
+
+now = timezone.now()
+start = now.replace(second=0, microsecond=0)
+end = start + timedelta(minutes=1)
+
+mailings = Mailing.objects.filter(time__gte=start, time__lt=end).exclude(status='pending')
+
+
+
+for mailing in mailings:
+    subject = mailing.message.sub
+    body = mailing.message.body
+    recipients = list(mailing.clients.values_list('email', flat=True))
+
+    mailing.status = 'pending'
+    mailing.save()
+    try:
+        send_mail(...)
+    except SMTPException as e:
+       ...
+    else:
+         ...
+    finally:
+          mailing.time = ... # time + period
+          mailing.status = 'ready'
+          mailing.save()

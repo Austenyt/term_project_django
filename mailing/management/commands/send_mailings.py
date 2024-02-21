@@ -15,6 +15,6 @@ class Command(BaseCommand):
             message = mailing.message.body
             recipients = [client.email for client in mailing.recipients.all()]
 
-            send_mail(subject, message, 'your_email@example.com', recipients)
+            send_mail(subject, message, '', recipients)
 
             self.stdout.write(self.style.SUCCESS(f'Successfully sent mailing "{subject}" to {", ".join(recipients)}'))

@@ -18,7 +18,7 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = ['time', 'frequency', 'client', 'message']
+        fields = ['time', 'frequency', 'clients', 'message']
 
     def clean_time(self):
         time = self.cleaned_data.get('time')
