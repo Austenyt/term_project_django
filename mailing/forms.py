@@ -1,5 +1,5 @@
 from django import forms
-from .models import Mailing, Client
+from .models import Mailing, Client, Message
 
 
 class StyleFormMixin:
@@ -18,4 +18,21 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = ['email', 'time', 'frequency', 'subject', 'body']
+        fields = ['time', 'frequency', 'client', 'message']
+
+    def clean_time(self):
+        time = self.cleaned_data.get('time')
+
+        # Проверяем, что введено время в формате HH:MM
+        if time and len(time) == 5 and time[2] != ':':
+            # Добавляем двоеточие между часами и минутами
+            time = f'{time[:2]}:{time[2:]}'
+            self.cleaned_data['time'] = time
+
+        return time
+
+
+class MessageForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['subject', 'body']
