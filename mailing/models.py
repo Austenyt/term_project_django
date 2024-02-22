@@ -43,10 +43,10 @@ class Mailing(models.Model):
     )
 
     clients = models.ManyToManyField(Client, verbose_name='Клиенты')
-    time = models.DateTimeField(verbose_name='Время рассылки')
+    time = models.TimeField(verbose_name='Время рассылки')
     frequency = models.CharField(max_length=5, choices=TIME_CHOICES, verbose_name='Периодичность')
     status = models.CharField(max_length=10, default='ready', choices=STATUS_CHOICES, verbose_name='Статус рассылки')
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение для рассылки')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Тема сообщения')
 
     def frequency_display(self):
         for choice in self.TIME_CHOICES:
@@ -65,7 +65,7 @@ class Mailing(models.Model):
 # Модель для Логов рассылки
 class MailingLog(models.Model):
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='Рассылка')
-    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Временная метка')
+    timestamp = models.TimeField(auto_now_add=True, verbose_name='Временная метка')
     status = models.CharField(max_length=20, verbose_name='Статус')
     server_response = models.TextField(blank=True, verbose_name='Ответ сервера')
 

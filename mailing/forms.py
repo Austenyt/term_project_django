@@ -18,18 +18,7 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = ['time', 'frequency', 'clients', 'message']
-
-    def clean_time(self):
-        time = self.cleaned_data.get('time')
-
-        # Проверяем, что введено время в формате HH:MM
-        if time and len(time) == 5 and time[2] != ':':
-            # Добавляем двоеточие между часами и минутами
-            time = f'{time[:2]}:{time[2:]}'
-            self.cleaned_data['time'] = time
-
-        return time
+        fields = ['clients', 'time', 'frequency', 'message']
 
 
 class MessageForm(StyleFormMixin, forms.ModelForm):
