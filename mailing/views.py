@@ -36,6 +36,9 @@ class ContactsView(View):
 
 class ClientListView(ListView):  # Cписок товаров при нажатии "Открыть" в списке категорий
     model = Client
+    extra_context = {
+        'title': 'Клиенты'
+    }
 
     # def get_queryset(self):
     #     return super().get_queryset().filter(
@@ -69,7 +72,10 @@ class ClientDetailView(DetailView):
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('mailing:index')
+    success_url = reverse_lazy('mailing:client_list')
+    extra_context = {
+        'title': 'Добавить клиента'
+    }
 
     # def test_func(self):
     #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
@@ -124,7 +130,7 @@ class ClientUpdateView(UpdateView):
 
 class ClientDeleteView(DeleteView):
     model = Client
-    successful_url = reverse_lazy('mailing:index')
+    success_url = reverse_lazy('mailing:index')
 
     # def test_func(self):
     #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
@@ -136,6 +142,9 @@ class ClientDeleteView(DeleteView):
 
 class MailingListView(ListView):
     model = Mailing
+    extra_context = {
+        'title': 'Рассылки'
+    }
 
     # template_name = 'mailing_list.html'
     # context_object_name = 'mailings'
@@ -155,18 +164,22 @@ class MailingDetailView(DetailView):
 class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
-    success_url = reverse_lazy('mailing:index')
+    success_url = reverse_lazy('mailing:mailing_list')
+    extra_context = {
+        'title': 'Добавить рассылку'
+    }
 
 
 class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
+    success_url = reverse_lazy('mailing:mailing_list')
     # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
 
 
 class MailingDeleteView(DeleteView):
     model = Mailing
-    successful_url = reverse_lazy('mailing:index')
+    success_url = reverse_lazy('mailing:mailing_list')
 
 
 class MessageListView(ListView):

@@ -2,8 +2,15 @@
 
 {% block content %}
 <div class="product-card">
-    <p>{{ mailing.time }}</p>
-    <h2>{{ mailing.frequency }}</h2>
+    <h2>{{ mailing.message }}</h2>
+    <h4>Клиенты:</h4>
+    <ul>
+        {% for client in mailing.clients.all %}
+        <li>{{ client.full_name }} - {{ client.email }}</li>
+        {% endfor %}
+    </ul>
+    <p>Время: {{ mailing.datetime }}</p>
+    <p>Как часто: {{ mailing.frequency }}</p>
     <div class="card-footer"></div>
 </div>
 {% endblock %}

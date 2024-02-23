@@ -8,7 +8,8 @@
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <div class="card-body">
-                <p class="card-text">{{ object.email }}</p>
+                <p class="card-text">Email: {{ object.email }}</p>
+                <p class="card-text">Имя: {{ object.full_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                         <a href="{% url 'mailing:client_detail' object.pk %}" type="button"

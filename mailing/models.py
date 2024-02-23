@@ -32,9 +32,9 @@ class Message(models.Model):
 # Модель для Рассылки
 class Mailing(models.Model):
     TIME_CHOICES = (
-        ('day', 'Раз в день'),
-        ('week', 'Раз в неделю'),
-        ('month', 'Раз в месяц'),
+        ('daily', 'Раз в день'),
+        ('weekly', 'Раз в неделю'),
+        ('monthly', 'Раз в месяц'),
     )
 
     STATUS_CHOICES = (
@@ -43,8 +43,8 @@ class Mailing(models.Model):
     )
 
     clients = models.ManyToManyField(Client, verbose_name='Клиенты')
-    time = models.TimeField(verbose_name='Время рассылки')
-    frequency = models.CharField(max_length=5, choices=TIME_CHOICES, verbose_name='Периодичность')
+    time = models.DateTimeField(verbose_name='Время рассылки')
+    frequency = models.CharField(max_length=10, choices=TIME_CHOICES, verbose_name='Периодичность')
     status = models.CharField(max_length=10, default='ready', choices=STATUS_CHOICES, verbose_name='Статус рассылки')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Тема сообщения')
 
