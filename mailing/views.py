@@ -169,12 +169,20 @@ class MailingCreateView(CreateView):
         'title': 'Добавить рассылку'
     }
 
+    def form_valid(self, form):
+        form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
+        return super().form_valid(form)
+
 
 class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
     # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
+
+    def form_valid(self, form):
+        form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
+        return super().form_valid(form)
 
 
 class MailingDeleteView(DeleteView):

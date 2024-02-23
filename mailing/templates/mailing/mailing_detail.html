@@ -9,8 +9,16 @@
         <li>{{ client.full_name }} - {{ client.email }}</li>
         {% endfor %}
     </ul>
-    <p>Время: {{ mailing.datetime }}</p>
-    <p>Как часто: {{ mailing.frequency }}</p>
+    <p>Дата: {{ mailing.time|date:"Y-m-d" }}</p>
+    <p>Время: {{ mailing.time|time:"H:i" }}</p>
+    <p>Как часто:
+        {% if mailing.frequency == 'daily' %}
+            Раз в день
+        {% elif mailing.frequency == 'weekly' %}
+            Раз в неделю
+        {% elif mailing.frequency == 'monthly' %}
+            Раз в месяц
+        {% endif %}
     <div class="card-footer"></div>
 </div>
 {% endblock %}
