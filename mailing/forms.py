@@ -19,12 +19,12 @@ class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
         fields = ['clients', 'time', 'frequency', 'message']
-        widgets = {
-            'time': forms.DateTimeInput(format='%Y-%m-%dT%H:%M'),
-        }
         # widgets = {
-        #     'time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        #     'time': forms.DateTimeInput(format='%Y-%m-%dT%H:%M'),
         # }
+        widgets = {
+            'time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
 
 class MessageForm(StyleFormMixin, forms.ModelForm):
