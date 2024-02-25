@@ -1,19 +1,20 @@
 {% extends 'mailing/base.html' %}
 {% block content%}
 <div class="col-12 mb-5">
-    <a class="btn btn-outline-primary" href="{% url 'mailing:client_create' %}">Добавить клиента</a>
-    <a class="btn btn-outline-primary" href="{% url 'mailing:mailing_create' %}">Добавить рассылку</a>
-    <a class="btn btn-outline-primary" href="{% url 'mailing:message_create' %}">Добавить сообщение</a>
+    <h5>Количество рассылок: {{ object_list|length }}</h5>
+    <h5>Количество активных рассылок: {{ active_mailings_count }}</h5>
+    <h5>Количество уникальных клиентов: {{ unique_clients_count }}</h5>
+    <h5>Подборка случайных статей из блога:</h5>
 </div>
 <div class="row">
-    {% for object in object_list %}
+    {% for article in article_list %}
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <div class="card-body">
-                <p class="card-text">{{ object.subject }}</p>
+                <p class="card-text">{{ article.title }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                        <a href="{% url 'mailing:mailing_detail' object.pk %}" type="button"
+                        <a href="{% url 'blog:blog_view' article.pk %}" type="button"
                            class="btn btn-sm btn-outline-secondary">Открыть</a>
                     </div>
                 </div>

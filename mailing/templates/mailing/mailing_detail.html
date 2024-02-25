@@ -1,5 +1,5 @@
 {% extends 'mailing/base.html' %}
-
+{% load tz %}
 {% block content %}
 <div class="product-card">
     <h2>{{ mailing.message }}</h2>
@@ -9,8 +9,8 @@
         <li>{{ client.full_name }} - {{ client.email }}</li>
         {% endfor %}
     </ul>
-    <p>Дата: {{ mailing.time|date:"Y-m-d" }}</p>
-    <p>Время: {{ mailing.time|time:"H:i" }}</p>
+    <p>Дата: {{ mailing.date }}</p>
+    <p>Время: {{ mailing.time }}</p>
     <p>Как часто:
         {% if mailing.frequency == 'daily' %}
             Раз в день
@@ -19,6 +19,15 @@
         {% elif mailing.frequency == 'monthly' %}
             Раз в месяц
         {% endif %}
-    <div class="card-footer"></div>
+    </p>
+    <p>Активна:
+        {% if mailing.is_active %}
+            Да
+        {% else %}
+            Нет
+        {% endif %}
+    </p>
+    <div class="card-footer">
+</div>
 </div>
 {% endblock %}

@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.urls import reverse_lazy
+
+from blog.models import Blog
 from .models import Mailing, Client, Message
 from .forms import MailingForm, ClientForm, MessageForm
 from .services import get_mailings
@@ -14,9 +16,18 @@ class IndexView(TemplateView):  # Главная страница
     }
 
     def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data['object_list'] = Mailing.objects.all()[:3]
-        return context_data
+        context = super().get_context_data(**kwargs)
+
+        context['article_list'] = Blog.objects.order_by('?')[:3]
+        context['object_list'] = Mailing.objects.all()
+
+        unique_clients_count = Client.objects.all().values('email').distinct().count()
+        context['unique_clients_count'] = unique_clients_count
+
+        active_mailings_count = Mailing.objects.filter(is_active=True).count()
+        context['active_mailings_count'] = active_mailings_count
+
+        return context
 
 
 class ContactsView(View):
@@ -34,12 +45,20 @@ class ContactsView(View):
         return render(request, self.template_name, {'title': 'Контакты'})
 
 
-class ClientListView(ListView):  # Cписок товаров при нажатии "Открыть" в списке категорий
+class ClientListView(ListView):
     model = Client
     extra_context = {
         'title': 'Клиенты'
     }
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Подсчет уникальных клиентов
+        unique_clients_count = count_unique_clients()
+
+        context['unique_clients_count'] = unique_clients_count
+        return context
     # def get_queryset(self):
     #     return super().get_queryset().filter(
     #         category_id=self.kwargs.get('pk'),
@@ -130,7 +149,7 @@ class ClientUpdateView(UpdateView):
 
 class ClientDeleteView(DeleteView):
     model = Client
-    success_url = reverse_lazy('mailing:index')
+    success_url = reverse_lazy('mailing:client_list')
 
     # def test_func(self):
     #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
@@ -178,6 +197,7 @@ class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
+
     # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
 
     def form_valid(self, form):

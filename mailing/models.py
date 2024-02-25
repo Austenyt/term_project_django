@@ -1,4 +1,7 @@
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils import timezone
 
 
 # Модель для Клиента сервиса
@@ -43,10 +46,12 @@ class Mailing(models.Model):
     )
 
     clients = models.ManyToManyField(Client, verbose_name='Клиенты')
-    time = models.DateTimeField(verbose_name='Время рассылки')
+    date = models.DateField(default=timezone.now, verbose_name='Дата рассылки')
+    time = models.TimeField(verbose_name='Время рассылки')
     frequency = models.CharField(max_length=10, choices=TIME_CHOICES, verbose_name='Периодичность')
     status = models.CharField(max_length=10, default='ready', choices=STATUS_CHOICES, verbose_name='Статус рассылки')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Тема сообщения')
+    is_active = models.BooleanField(default=True, verbose_name='Активна')
 
     def frequency_display(self):
         for choice in self.TIME_CHOICES:
@@ -60,6 +65,24 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+    #     permissions = [
+    #         (
+    #             'can_deactivate_mailing',
+    #             'Can deactivate mailing',
+    #         ),
+    #     ]
+    #
+    # def assign_deactivate_mailing(self, user):
+    #     content_type = ContentType.objects.get_for_model(Mailing)
+    #     permission = Permission.objects.get(
+    #         codename="can_deactivate_mailing",
+    #         content_type=content_type,
+    #         defaults={
+    #             'name': 'Can deactivate mailing',
+    #             'content_type': content_type,
+    #         }
+    #     )
+    #     user.user_permissions.add(permission)
 
 
 # Модель для Логов рассылки

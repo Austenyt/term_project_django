@@ -25,24 +25,6 @@
                 </div>
             </div>
         </div>
-        {% if perms.mailing.change_message %}
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    Версии
-                </div>
-                <div class="card-body">
-                    {{ formset.management_form }}
-                    {% for form in formset.forms %}
-                    {{ form.as_p }}
-                    {% if not forloop.last %}
-                    <hr>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </form>
 {% endblock %}
