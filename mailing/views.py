@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from blog.models import Blog
 from .models import Mailing, Client, Message
 from .forms import MailingForm, ClientForm, MessageForm
-from .services import get_mailings
 
 
 class IndexView(TemplateView):  # Главная страница
@@ -51,14 +50,6 @@ class ClientListView(ListView):
         'title': 'Клиенты'
     }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Подсчет уникальных клиентов
-        unique_clients_count = count_unique_clients()
-
-        context['unique_clients_count'] = unique_clients_count
-        return context
     # def get_queryset(self):
     #     return super().get_queryset().filter(
     #         category_id=self.kwargs.get('pk'),
