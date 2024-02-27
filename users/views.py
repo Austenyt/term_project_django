@@ -8,7 +8,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 
 from config import settings
-from users.forms import UserRegisterForm, UserProfileForm
+from users.forms import UserCreateForm, UserUpdateForm
 from users.models import User
 
 
@@ -24,9 +24,9 @@ class UserListView(ListView):
         return queryset
 
 
-class RegisterView(LoginRequiredMixin, CreateView):
+class UserCreateView(LoginRequiredMixin, CreateView):
     model = User
-    form_class = UserRegisterForm
+    form_class = UserCreateForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')
 
@@ -43,8 +43,8 @@ class RegisterView(LoginRequiredMixin, CreateView):
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
-    form_class = UserProfileForm
-    success_url = reverse_lazy('users:profile')
+    form_class = UserUpdateForm
+    success_url = reverse_lazy('users:user_update')
 
     def get_object(self, queryset=None):
         return self.request.user

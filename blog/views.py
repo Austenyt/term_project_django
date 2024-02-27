@@ -19,7 +19,7 @@ class BlogListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['articles'] = get_cached_articles_for_blog(self.request.GET.get('pk'))
+        context_data['article'] = get_cached_articles_for_blog(self.request.GET.get('pk'))
         return context_data
 
 

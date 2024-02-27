@@ -26,11 +26,12 @@ def send_mailing(mailing_id):
     mailing = Mailing.objects.get(pk=mailing_id)
     message = mailing.message
     clients = mailing.clients.all()
+    status
 
     for client in clients:
-        subject = message.subject.encode('utf-8')  # Кодируем строку в байты с использованием utf-8
+        # subject = message.subject.encode('utf-8')  # Кодируем строку в байты с использованием utf-8
         send_mail(
-            subject=subject,
+            subject=message.subject,
             message=message.body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[client.email],
@@ -39,6 +40,7 @@ def send_mailing(mailing_id):
 
         # Отправка ответа на сервер после успешной отправки сообщения
         response = f"Рассылка успешно отправлена клиенту {client.email}"
+        print(response)
         logger.info(response)
 
     return HttpResponse("Рассылка завершена успешно")
@@ -61,9 +63,11 @@ class Command(BaseCommand):
                 replace_existing=True,
             )
             logger.info(f"Added job for mailing '{mailing}'.")
+            print(f"Added job for mailing '{mailing}'.")
 
         try:
             logger.info("Starting scheduler...")
+            print(f"start scheduler")
             scheduler.start()
         except KeyboardInterrupt:
             logger.info("Stopping scheduler...")
