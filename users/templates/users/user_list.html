@@ -1,30 +1,27 @@
 {% extends 'mailing/base.html' %}
-{% block content %}
+{% block content%}
 <div class="col-12 mb-5">
-    <a class="btn btn-outline-primary" href="{% url 'users:register' %}">Регистрация пользователя</a>
+    <a class="btn btn-outline-primary" href="{% url 'users:client_create' %}">Добавить клиента</a>
 </div>
 <div class="row">
-    {% for user in user_list %}
+    {% for object in object_list %}
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <div class="card-body">
-                <p class="card-text">
-                    {% if user.is_active %}
-                    {{ object|title }}
-                    {% else %}
-                    <span class="text-muted>">{{ object|title }}</span>
-                    {% endif %}
-                </p>
+                <p class="card-text">Email: {{ object.email }}</p>
+                <p class="card-text">Имя: {{ object.full_name }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                        <a href="{% url 'blog:blog_view' object.pk %}"
-                           class="btn btn-sm btn-outline-secondary">Смотреть</a>
-                        <a href="{% url 'blog:blog_update' object.pk %}" type="button"
+                        <a href="{% url 'mailing:client_detail' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-secondary">Открыть</a>
+                        <a href="{% url 'mailing:client_update' object.pk %}" type="button"
                            class="btn btn-sm btn-outline-secondary">Редактировать</a>
-                        <a href="{% url 'blog:blog_delete' object.pk %}" type="button"
+                        <a href="{% url 'mailing:client_delete' object.pk %}" type="button"
                            class="btn btn-sm btn-outline-secondary">Удалить</a>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer">
             </div>
         </div>
     </div>

@@ -16,7 +16,7 @@ class UserProfileForm(StyleFormMixin, UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'phone', 'country', 'avatar')
+        fields = ('email', 'first_name', 'last_name', 'is_not_blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

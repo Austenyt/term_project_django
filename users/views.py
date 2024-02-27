@@ -5,11 +5,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 
 from config import settings
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
+
+
+class UserListView(ListView):
+    model = User
+    extra_context = {
+        'title': 'Пользователи'
+    }
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.filter(is_not_blocked=True)
+        return queryset
 
 
 class RegisterView(LoginRequiredMixin, CreateView):
@@ -36,6 +48,17 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'users/user_detail.html'
+    context_object_name = 'user'
+
+
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('users:user_list')
 
 
 @login_required
