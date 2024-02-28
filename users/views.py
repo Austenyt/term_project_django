@@ -63,6 +63,9 @@ class UserDetailView(DetailView):
     model = User
     template_name = 'users/user_detail.html'
     context_object_name = 'user'
+    extra_context = {
+        'title': 'Карточка пользователя'
+    }
 
 
 class UserDeleteView(DeleteView):

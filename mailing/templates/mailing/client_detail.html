@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="product-card">
-    <p>{{ client.email }}</p>
-    <h2>{{ client.full_name }}</h2>
-    <h2>{{ client.comment }}</h2>
+    <p>Email клиента: {{ client.email }}</p>
+    <p>Имя клиента: {{ client.full_name }}</p>
+    <p>Комментарий: {{ client.comment }}</p>
     <div class="card-footer"></div>
 </div>
 {% endblock %}

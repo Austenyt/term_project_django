@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
@@ -44,7 +45,7 @@ class ContactsView(View):
         return render(request, self.template_name, {'title': 'Контакты'})
 
 
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     extra_context = {
         'title': 'Клиенты'
@@ -64,10 +65,13 @@ class ClientListView(ListView):
     #     return context_data
 
 
-class ClientDetailView(DetailView):
+class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
     template_name = 'mailing/client_detail.html'
     context_object_name = 'client'
+    extra_context = {
+        'title': 'Карточка клиента'
+    }
 
     # def product_detail_view(request, product_id):
     #     product = Product.objects.get(pk=product_id)
@@ -79,7 +83,7 @@ class ClientDetailView(DetailView):
     #     return render(request, 'product_list.html', context)
 
 
-class ClientCreateView(CreateView):
+class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing:client_list')
@@ -95,9 +99,12 @@ class ClientCreateView(CreateView):
     #     # на страницу авторизации при попытке доступа без авторизации
 
 
-class ClientUpdateView(UpdateView):
+class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
+    extra_context = {
+        'title': 'Редактировать клиента'
+    }
     # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
 
     # def test_func(self):
@@ -138,9 +145,12 @@ class ClientUpdateView(UpdateView):
     #     return super().form_valid(form)
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('mailing:client_list')
+    extra_context = {
+        'title': 'Удаление клиента'
+    }
 
     # def test_func(self):
     #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
@@ -150,7 +160,7 @@ class ClientDeleteView(DeleteView):
     #     # на страницу авторизации при попытке доступа без авторизации
 
 
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     extra_context = {
         'title': 'Рассылки'
@@ -165,13 +175,16 @@ class MailingListView(ListView):
     #     return context
 
 
-class MailingDetailView(DetailView):
+class MailingDetailView(LoginRequiredMixin, DetailView):
     model = Mailing
     template_name = 'mailing/mailing_detail.html'
     context_object_name = 'mailing'
+    extra_context = {
+        'title': 'Детали рассылки'
+    }
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
@@ -179,30 +192,41 @@ class MailingCreateView(CreateView):
         'title': 'Добавить рассылку'
     }
 
+    permission_required = ['mailing.can_activate_mailing', 'mailing.can_deactivate_mailing']
+
     def form_valid(self, form):
         form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
         return super().form_valid(form)
 
 
-class MailingUpdateView(UpdateView):
+class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
+    extra_context = {
+        'title': 'Редактировать рассылку'
+    }
 
-    # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
+    permission_required = ['mailing.can_activate_mailing', 'mailing.can_deactivate_mailing']
 
     def form_valid(self, form):
         form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
         return super().form_valid(form)
 
 
-class MailingDeleteView(DeleteView):
+class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Mailing
     success_url = reverse_lazy('mailing:mailing_list')
+    extra_context = {
+        'title': 'Удаление рассылки'
+    }
 
 
-class MessageListView(ListView):
+class MessageListView(LoginRequiredMixin, ListView):
     model = Message
+    extra_context = {
+        'title': 'Сообщения для рассылок'
+    }
 
     # template_name = 'mailing_list.html'
     # context_object_name = 'mailings'
@@ -213,25 +237,36 @@ class MessageListView(ListView):
     #     return context
 
 
-class MessageDetailView(DetailView):
+class MessageDetailView(LoginRequiredMixin, DetailView):
     model = Message
     template_name = 'mailing/message_detail.html'
     context_object_name = 'message'
+    extra_context = {
+        'title': 'Детали сообщения'
+    }
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('mailing:message_list')
+    extra_context = {
+        'title': 'Создать сообщение'
+    }
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('mailing:message_list')
-    # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
+    extra_context = {
+        'title': 'Редактировать сообщение'
+    }
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Message
     successful_url = reverse_lazy('mailing:index')
+    extra_context = {
+        'title': 'Удаление сообщения'
+    }

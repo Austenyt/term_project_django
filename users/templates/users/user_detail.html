@@ -2,7 +2,14 @@
 
 {% block content %}
 <div class="product-card">
-    <p>{{ user.email }}</p>
+    <p>Email пользователя: {{ user.email }}</p>
+    <p>Пользователь активен:
+        {% if user.is_not_blocked %}
+            Да
+        {% else %}
+            Нет
+        {% endif %}
+    </p>
     <div class="card-footer"></div>
 </div>
 {% endblock %}

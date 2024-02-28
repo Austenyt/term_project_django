@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
@@ -9,8 +10,11 @@ from blog.services import get_cached_articles_for_blog
 from config import settings
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     model = Blog
+    extra_context = {
+        'title': 'Статьи блога'
+    }
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
@@ -23,10 +27,13 @@ class BlogListView(ListView):
         return context_data
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Blog
     form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
+    extra_context = {
+        'title': 'Создать статью'
+    }
 
     def form_valid(self, form):
         if form.is_valid():
@@ -36,10 +43,13 @@ class BlogCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Blog
     form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
+    extra_context = {
+        'title': 'Редактировать статью'
+    }
 
     def form_valid(self, form):
         if form.is_valid():
@@ -52,8 +62,11 @@ class BlogUpdateView(UpdateView):
         return reverse('blog:blog_view', args=[self.kwargs.get('pk')])
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
+    extra_context = {
+        'title': 'Просмотр статьи'
+    }
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -62,6 +75,9 @@ class BlogDetailView(DetailView):
         return self.object
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Blog
     success_url = reverse_lazy('blog:blog_list')
+    extra_context = {
+        'title': 'Удаление статьи'
+    }
