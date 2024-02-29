@@ -1,5 +1,6 @@
 import logging
 from datetime import timedelta
+from email.header import Header, make_header
 from smtplib import SMTPException
 
 from django.utils import timezone
@@ -19,7 +20,7 @@ from mailing.models import Mailing
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler = logging.FileHandler('app.log', encoding='utf-8')  # Указываем кодировку utf-8
+handler = logging.FileHandler('app.log')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -31,8 +32,9 @@ def send_mailing(mailing_id):
     clients = mailing.clients.all()
 
     for client in clients:
+        subject = message.subject
         send_mail(
-            subject=message.subject,
+            subject=subject,
             message=message.body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[client.email],
@@ -85,6 +87,8 @@ class Command(BaseCommand):
                 mailing.time = mailing.time + timedelta(days=1)
                 mailing.status = 'ready'
                 mailing.save()
+            print(f"Mailing processed for '{mailing}'.")
+
         print(f"Mailings processed for {start}-{end}")
 
         for mailing in Mailing.objects.filter(status='ready', is_active=True):
@@ -107,28 +111,3 @@ class Command(BaseCommand):
             logger.info("Stopping scheduler...")
             scheduler.shutdown()
             logger.info("Scheduler shut down successfully!")
-
-    # def handle(self, *args, **options):
-    #     scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
-    #     scheduler.add_jobstore(DjangoJobStore(), "default")
-    #
-    #     for mailing in Mailing.objects.filter(status='ready', is_active=True):
-    #         scheduler.add_job(
-    #             send_mailing,
-    #             trigger=CronTrigger(day_of_week=mailing.date.weekday(), hour=mailing.time.hour,
-    #                                 minute=mailing.time.minute),
-    #             id=f"mailing_{mailing.id}",
-    #             args=[mailing.id],
-    #             replace_existing=True,
-    #         )
-    #         logger.info(f"Added job for mailing '{mailing}'.")
-    #         print(f"Added job for mailing '{mailing}'.")
-    #
-    #     try:
-    #         logger.info("Starting scheduler...")
-    #         print(f"start scheduler")
-    #         scheduler.start()
-    #     except KeyboardInterrupt:
-    #         logger.info("Stopping scheduler...")
-    #         scheduler.shutdown()
-    #         logger.info("Scheduler shut down successfully!")

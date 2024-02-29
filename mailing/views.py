@@ -92,6 +92,7 @@ class MailingListView(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Рассылки'
     }
+    permission_required = 'mailing.can_view_mailing_list'
 
     def test_func(self):
         return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
@@ -108,6 +109,13 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
     extra_context = {
         'title': 'Детали рассылки'
     }
+
+    def test_func(self):
+        return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
+
+    def handle_no_permission(self):
+        return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
+        # на страницу авторизации при попытке доступа без авторизации
 
 
 class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -135,6 +143,13 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     permission_required = 'mailing.can_deactivate_mailing'
 
+    def test_func(self):
+        return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
+
+    def handle_no_permission(self):
+        return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
+        # на страницу авторизации при попытке доступа без авторизации
+
     def form_valid(self, form):
         form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
         return super().form_valid(form)
@@ -154,6 +169,13 @@ class MessageListView(LoginRequiredMixin, ListView):
         'title': 'Сообщения для рассылок'
     }
 
+    def test_func(self):
+        return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
+
+    def handle_no_permission(self):
+        return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
+        # на страницу авторизации при попытке доступа без авторизации
+
 
 class MessageDetailView(LoginRequiredMixin, DetailView):
     model = Message
@@ -172,6 +194,13 @@ class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         'title': 'Создать сообщение'
     }
 
+    def test_func(self):
+        return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
+
+    def handle_no_permission(self):
+        return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
+        # на страницу авторизации при попытке доступа без авторизации
+
 
 class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Message
@@ -180,6 +209,13 @@ class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     extra_context = {
         'title': 'Редактировать сообщение'
     }
+
+    def test_func(self):
+        return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
+
+    def handle_no_permission(self):
+        return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
+        # на страницу авторизации при попытке доступа без авторизации
 
 
 class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):

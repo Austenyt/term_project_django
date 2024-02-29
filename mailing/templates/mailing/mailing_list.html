@@ -1,9 +1,10 @@
 {% extends 'mailing/base.html' %}
 {% block content%}
-{% if perms.mailing.view_mailing %}
+{% if perms.mailing.create_mailing %}
 <div class="col-12 mb-5">
     <a class="btn btn-outline-primary" href="{% url 'mailing:mailing_create' %}">Добавить рассылку</a>
 </div>
+{% endif %}
 <div class="row">
     {% for object in object_list %}
     <div class="col-md-4">
@@ -23,8 +24,10 @@
                            class="btn btn-sm btn-outline-secondary">Открыть</a>
                         <a href="{% url 'mailing:mailing_update' object.pk %}" type="button"
                            class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                        {% if perms.mailing.delete_mailing %}
                         <a href="{% url 'mailing:mailing_delete' object.pk %}" type="button"
                            class="btn btn-sm btn-outline-secondary">Удалить</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -34,5 +37,4 @@
     </div>
     {% endfor %}
 </div>
-{% endif %}
 {% endblock %}
