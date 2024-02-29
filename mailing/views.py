@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
@@ -51,19 +52,6 @@ class ClientListView(LoginRequiredMixin, ListView):
         'title': 'Клиенты'
     }
 
-    # def get_queryset(self):
-    #     return super().get_queryset().filter(
-    #         category_id=self.kwargs.get('pk'),
-    #         owner=self.request.user
-    #     )
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context_data = super().get_context_data(*args, **kwargs)
-    #     category_item = Category.objects.get(pk=self.kwargs.get('pk'))
-    #     context_data['category_pk'] = category_item.pk
-    #     context_data['title'] = f'Категория с товарами {category_item.name}'
-    #     return context_data
-
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
@@ -72,15 +60,6 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     extra_context = {
         'title': 'Карточка клиента'
     }
-
-    # def product_detail_view(request, product_id):
-    #     product = Product.objects.get(pk=product_id)
-    #     versions = product.get_versions()  # Получаем все версии продукта
-    #     context = {
-    #         'product': product,
-    #         'versions': versions,  # Передаем версии продукта в контекст
-    #     }
-    #     return render(request, 'product_list.html', context)
 
 
 class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -91,13 +70,6 @@ class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         'title': 'Добавить клиента'
     }
 
-    # def test_func(self):
-    #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
-    #
-    # def handle_no_permission(self):
-    #     return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
-    #     # на страницу авторизации при попытке доступа без авторизации
-
 
 class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Client
@@ -105,44 +77,6 @@ class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     extra_context = {
         'title': 'Редактировать клиента'
     }
-    # permission_required = ['goods.can_unpublish_product', 'goods.can_change_product_description', 'goods.can_change_product_category']
-
-    # def test_func(self):
-    #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
-    #
-    # def handle_no_permission(self):
-    #     return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
-    #     # на страницу авторизации при попытке доступа без авторизации
-    #
-    # def get_object(self, queryset=None):
-    #     self.object = super().get_object(queryset)
-    #     if self.object.owner != self.request.user:
-    #         raise Http404
-    #     return self.object
-    #
-    # def get_success_url(self):
-    #     return reverse('goods:product_update', args=[self.kwargs.get('pk')])
-    #
-    # def get_context_data(self, **kwargs):
-    #     context_data = super().get_context_data(**kwargs)
-    #     VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
-    #     if self.request.method == 'POST':
-    #         formset = VersionFormset(self.request.POST, instance=self.object)
-    #     else:
-    #         formset = VersionFormset(instance=self.object)
-    #
-    #     context_data['formset'] = formset
-    #     return context_data
-    #
-    # def form_valid(self, form):
-    #     context_data = self.get_context_data()
-    #     formset = context_data['formset']
-    #     self.object = form.save()
-    #
-    #     if formset.is_valid():
-    #         formset.instance = self.object
-    #         formset.save()
-    #     return super().form_valid(form)
 
 
 class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
@@ -152,13 +86,6 @@ class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         'title': 'Удаление клиента'
     }
 
-    # def test_func(self):
-    #     return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
-    #
-    # def handle_no_permission(self):
-    #     return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
-    #     # на страницу авторизации при попытке доступа без авторизации
-
 
 class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
@@ -166,13 +93,12 @@ class MailingListView(LoginRequiredMixin, ListView):
         'title': 'Рассылки'
     }
 
-    # template_name = 'mailing_list.html'
-    # context_object_name = 'mailings'
+    def test_func(self):
+        return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['mailings'] = get_mailings(self.object.pk)
-    #     return context
+    def handle_no_permission(self):
+        return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
+        # на страницу авторизации при попытке доступа без авторизации
 
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
@@ -192,7 +118,7 @@ class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         'title': 'Добавить рассылку'
     }
 
-    permission_required = ['mailing.can_activate_mailing', 'mailing.can_deactivate_mailing']
+    permission_required = 'mailing.can_deactivate_mailing'
 
     def form_valid(self, form):
         form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
@@ -207,7 +133,7 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
         'title': 'Редактировать рассылку'
     }
 
-    permission_required = ['mailing.can_activate_mailing', 'mailing.can_deactivate_mailing']
+    permission_required = 'mailing.can_deactivate_mailing'
 
     def form_valid(self, form):
         form.instance.time = form.cleaned_data['time']  # Присваиваем дату и время рассылки из формы
@@ -227,14 +153,6 @@ class MessageListView(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Сообщения для рассылок'
     }
-
-    # template_name = 'mailing_list.html'
-    # context_object_name = 'mailings'
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['messages'] = get_messages(self.object.pk)
-    #     return context
 
 
 class MessageDetailView(LoginRequiredMixin, DetailView):

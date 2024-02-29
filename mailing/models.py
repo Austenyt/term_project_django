@@ -67,31 +67,22 @@ class Mailing(models.Model):
         verbose_name_plural = 'Рассылки'
         permissions = [
             (
-                'can_activate_mailing',
-                'Can activate mailing',
-            ),
-            (
                 'can_deactivate_mailing',
                 'Can deactivate mailing',
             ),
         ]
 
-
-content_type = ContentType.objects.get_for_model(Mailing)
-
-# Разрешение на активацию рассылки
-permission_activate = Permission.objects.create(
-    codename='can_activate_mailing',
-    name='Can activate mailing',
-    content_type=content_type,
-)
-
-# Разрешение на деактивацию рассылки
-permission_deactivate = Permission.objects.create(
-    codename='can_deactivate_mailing',
-    name='Can deactivate mailing',
-    content_type=content_type,
-)
+    def assign_deactivate_permission(self, user):
+        content_type = ContentType.objects.get_for_model(Mailing)
+        permission = Permission.objects.get(
+            codename="can_deactivate_mailing",
+            content_type=content_type,
+            defaults={
+                'name': 'Can deactivate mailing',
+                'content_type': content_type,
+            }
+        )
+        user.user_permissions.add(permission)
 
 
 # Модель для Логов рассылки

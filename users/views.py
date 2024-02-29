@@ -1,7 +1,7 @@
 import random
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -12,11 +12,13 @@ from users.forms import UserProfileForm, UserRegisterForm, UserAdminForm
 from users.models import User
 
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
     extra_context = {
         'title': 'Пользователи'
     }
+    permission_required = 'user.can_view_user_list'
+
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
@@ -41,10 +43,11 @@ class RegisterView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = User
     form_class = UserProfileForm
     success_url = reverse_lazy('users:profile')
+    permission_required = 'user.can_block_user'
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -59,7 +62,7 @@ class UserAdminUpdateView(LoginRequiredMixin, UpdateView):
         return User.objects.get(pk=self.kwargs['pk'])
 
 
-class UserDetailView(DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'users/user_detail.html'
     context_object_name = 'user'
@@ -68,7 +71,7 @@ class UserDetailView(DetailView):
     }
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy('users:user_list')
 
