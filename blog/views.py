@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.cache import cache
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
@@ -7,10 +6,12 @@ from django.views.generic import CreateView, UpdateView, ListView, DetailView, D
 from blog.forms import BlogForm
 from blog.models import Blog
 from blog.services import get_cached_articles_for_blog
-from config import settings
 
 
 class BlogListView(LoginRequiredMixin, ListView):
+    """
+        Представление для отображения списка статей блога.
+    """
     model = Blog
     extra_context = {
         'title': 'Статьи блога'
@@ -28,6 +29,9 @@ class BlogListView(LoginRequiredMixin, ListView):
 
 
 class BlogCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """
+        Представление для создания новой статьи блога.
+    """
     model = Blog
     form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
@@ -44,6 +48,9 @@ class BlogCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class BlogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+        Представление для редактирования статьи блога.
+    """
     model = Blog
     form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
@@ -63,10 +70,17 @@ class BlogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 class BlogDetailView(LoginRequiredMixin, DetailView):
+    """
+        Представление для отображения деталей статьи блога.
+    """
     model = Blog
     extra_context = {
         'title': 'Просмотр статьи'
     }
+
+    def __init__(self, **kwargs):
+        super().__init__(kwargs)
+        self.object = None
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -76,6 +90,9 @@ class BlogDetailView(LoginRequiredMixin, DetailView):
 
 
 class BlogDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """
+        Представление для удаления статьи блога.
+    """
     model = Blog
     success_url = reverse_lazy('blog:blog_list')
     extra_context = {

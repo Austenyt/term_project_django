@@ -2,6 +2,10 @@ from django.db import models
 
 
 class Blog(models.Model):
+    """
+    Модель блога.
+    """
+
     title = models.CharField(max_length=150, verbose_name='название')
     slug = models.CharField(max_length=150, verbose_name='slug', null=True, blank=True)
     body = models.TextField(verbose_name='содержимое')
@@ -11,6 +15,9 @@ class Blog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """
+        Возвращает строковое представление объекта блога.
+        """
         return self.title
 
     class Meta:

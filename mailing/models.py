@@ -6,6 +6,10 @@ from django.utils import timezone
 
 # Модель для Клиента сервиса
 class Client(models.Model):
+    """
+        Модель для Клиента сервиса.
+
+    """
     email = models.EmailField(verbose_name='Email клиента')
     full_name = models.CharField(max_length=100, verbose_name='Полное имя')
     comment = models.TextField(blank=True, verbose_name='Комментарий')
@@ -20,6 +24,10 @@ class Client(models.Model):
 
 # Модель для Сообщения для рассылки
 class Message(models.Model):
+    """
+        Модель для Сообщения для рассылки.
+
+    """
     # mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='Рассылка')
     subject = models.CharField(max_length=255, verbose_name='Тема')
     body = models.TextField(verbose_name='Текст сообщения')
@@ -34,6 +42,10 @@ class Message(models.Model):
 
 # Модель для Рассылки
 class Mailing(models.Model):
+    """
+        Модель для Рассылки.
+
+    """
     TIME_CHOICES = (
         ('daily', 'Раз в день'),
         ('weekly', 'Раз в неделю'),
@@ -54,6 +66,10 @@ class Mailing(models.Model):
     is_active = models.BooleanField(default=True, verbose_name='Активна')
 
     def frequency_display(self):
+        """
+                Возвращает отображаемую периодичность рассылки.
+
+        """
         for choice in self.TIME_CHOICES:
             if choice[0] == self.frequency:
                 return choice[1]
@@ -73,6 +89,9 @@ class Mailing(models.Model):
         ]
 
     def assign_deactivate_permission(self, user):
+        """
+                Назначает пользователю разрешение на деактивацию рассылки.
+        """
         content_type = ContentType.objects.get_for_model(Mailing)
         permission = Permission.objects.get(
             codename="can_deactivate_mailing",
@@ -87,6 +106,10 @@ class Mailing(models.Model):
 
 # Модель для Логов рассылки
 class MailingLog(models.Model):
+    """
+        Модель для Логов рассылки.
+
+    """
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='Рассылка')
     timestamp = models.TimeField(auto_now_add=True, verbose_name='Временная метка')
     status = models.CharField(max_length=20, verbose_name='Статус')

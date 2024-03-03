@@ -4,6 +4,9 @@ from django.db import models
 
 
 class User(AbstractUser):
+    """
+        Пользовательская модель пользователя, расширяющая AbstractUser.
+    """
     username = None
     email = models.EmailField(unique=True, verbose_name='почта')
 
@@ -30,6 +33,9 @@ class User(AbstractUser):
         ]
 
     def assign_block_permission(self, user):
+        """
+            Назначает разрешение на блокировку пользователю.
+        """
         content_type = ContentType.objects.get_for_model(User)
         permission = Permission.objects.get(
             codename="can_block_user",
@@ -42,6 +48,10 @@ class User(AbstractUser):
         user.user_permissions.add(permission)
 
     def assign_user_list_view_permission(self, user):
+        """
+           Назначает разрешение на просмотр списка пользователей для пользователя.
+
+        """
         content_type = ContentType.objects.get_for_model(User)
         permission = Permission.objects.get(
             codename="can_view_user_list",

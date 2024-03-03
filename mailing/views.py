@@ -10,7 +10,11 @@ from .models import Mailing, Client, Message
 from .forms import MailingForm, ClientForm, MessageForm
 
 
-class IndexView(TemplateView):  # Главная страница
+class IndexView(TemplateView):
+    """
+        Представление главной страницы.
+
+    """
     template_name = 'mailing/index.html'
     extra_context = {
         'title': 'Сервис отправки сообщений в рассылке'
@@ -32,6 +36,10 @@ class IndexView(TemplateView):  # Главная страница
 
 
 class ContactsView(View):
+    """
+        Представление страницы контактов.
+
+    """
     template_name = 'mailing/contacts.html'
 
     def get(self, request, *args, **kwargs):
@@ -47,6 +55,10 @@ class ContactsView(View):
 
 
 class ClientListView(LoginRequiredMixin, ListView):
+    """
+        Представление списка клиентов.
+
+    """
     model = Client
     extra_context = {
         'title': 'Клиенты'
@@ -54,6 +66,10 @@ class ClientListView(LoginRequiredMixin, ListView):
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
+    """
+        Представление деталей клиента.
+
+    """
     model = Client
     template_name = 'mailing/client_detail.html'
     context_object_name = 'client'
@@ -62,7 +78,11 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     }
 
 
-class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
+    """
+        Представление для создания нового клиента.
+
+    """
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing:client_list')
@@ -72,6 +92,10 @@ class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+        Представление для редактирования клиента.
+
+    """
     model = Client
     form_class = ClientForm
     extra_context = {
@@ -80,6 +104,10 @@ class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """
+        Представление для удаления клиента.
+
+    """
     model = Client
     success_url = reverse_lazy('mailing:client_list')
     extra_context = {
@@ -88,6 +116,10 @@ class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
 
 class MailingListView(LoginRequiredMixin, ListView):
+    """
+        Представление списка рассылок.
+
+    """
     model = Mailing
     extra_context = {
         'title': 'Рассылки'
@@ -95,14 +127,24 @@ class MailingListView(LoginRequiredMixin, ListView):
     permission_required = 'mailing.can_view_mailing_list'
 
     def test_func(self):
+        """
+                Определяет, авторизован ли пользователь.
+        """
         return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
 
     def handle_no_permission(self):
+        """
+                Обрабатывает отсутствие разрешения на доступ.
+        """
         return LoginView.as_view(template_name='users/login.html')(self.request)  # Метод для возврата пользователя
         # на страницу авторизации при попытке доступа без авторизации
 
 
 class MailingDetailView(LoginRequiredMixin, DetailView):
+    """
+        Представление деталей рассылки.
+
+    """
     model = Mailing
     template_name = 'mailing/mailing_detail.html'
     context_object_name = 'mailing'
@@ -119,6 +161,10 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
 
 
 class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """
+        Представление для создания новой рассылки.
+
+    """
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
@@ -134,6 +180,10 @@ class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
 
 
 class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+    Представление для редактирования рассылки
+
+    """
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
@@ -156,6 +206,10 @@ class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
 
 class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """
+        Представление для удаления рассылки
+
+    """
     model = Mailing
     success_url = reverse_lazy('mailing:mailing_list')
     extra_context = {
@@ -164,6 +218,10 @@ class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
 
 class MessageListView(LoginRequiredMixin, ListView):
+    """
+        Представление для списка сообщений
+
+    """
     model = Message
     extra_context = {
         'title': 'Сообщения для рассылок'
@@ -178,6 +236,10 @@ class MessageListView(LoginRequiredMixin, ListView):
 
 
 class MessageDetailView(LoginRequiredMixin, DetailView):
+    """
+        Представление деталей сообщения.
+
+    """
     model = Message
     template_name = 'mailing/message_detail.html'
     context_object_name = 'message'
@@ -187,6 +249,10 @@ class MessageDetailView(LoginRequiredMixin, DetailView):
 
 
 class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """
+        Представление для создания сообщения.
+
+    """
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('mailing:message_list')
@@ -203,6 +269,10 @@ class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
 
 
 class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+        Представление для редактирования сообщения.
+
+    """
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('mailing:message_list')
@@ -219,6 +289,10 @@ class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
 
 class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """
+        Представление для удаления сообщения.
+
+    """
     model = Message
     successful_url = reverse_lazy('mailing:index')
     extra_context = {

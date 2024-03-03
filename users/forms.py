@@ -6,6 +6,10 @@ from users.models import User
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
+    """
+            Форма для регистрации пользователя.
+
+    """
 
     class Meta:
         model = User
@@ -13,6 +17,10 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 
 
 class UserProfileForm(StyleFormMixin, UserChangeForm):
+    """
+        Форма для редактирования пользователя.
+
+    """
 
     class Meta:
         model = User
@@ -25,6 +33,10 @@ class UserProfileForm(StyleFormMixin, UserChangeForm):
 
 
 class UserAdminForm(StyleFormMixin, UserChangeForm):
+    """
+        Форма для редактирования зарегистрированных пользователей из-под админа.
+
+    """
     class Meta:
         model = User
         fields = ['email', 'is_not_blocked']

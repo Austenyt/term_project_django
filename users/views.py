@@ -13,12 +13,15 @@ from users.models import User
 
 
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    """
+       Представление списка пользователей.
+
+    """
     model = User
     extra_context = {
         'title': 'Пользователи'
     }
     permission_required = 'user.can_view_user_list'
-
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
@@ -26,7 +29,11 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return queryset
 
 
-class RegisterView(LoginRequiredMixin, CreateView):
+class RegisterView(CreateView):
+    """
+       Представление регистрации нового пользователя.
+
+    """
     model = User
     form_class = UserRegisterForm
     template_name = 'users/register.html'
@@ -44,6 +51,11 @@ class RegisterView(LoginRequiredMixin, CreateView):
 
 
 class UserUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """
+       Представление обновления профиля пользователя.
+
+    """
+
     model = User
     form_class = UserProfileForm
     success_url = reverse_lazy('users:profile')
@@ -54,6 +66,10 @@ class UserUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 class UserAdminUpdateView(LoginRequiredMixin, UpdateView):
+    """
+        Представление обновления профиля пользователя администратором.
+
+    """
     model = User
     form_class = UserAdminForm
     success_url = reverse_lazy('users:user_list')
@@ -63,6 +79,10 @@ class UserAdminUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
+    """
+        Представление просмотра профиля пользователя.
+
+    """
     model = User
     template_name = 'users/user_detail.html'
     context_object_name = 'user'
@@ -72,12 +92,20 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 class UserDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """
+        Представление удаления профиля пользователя.
+
+    """
     model = User
     success_url = reverse_lazy('users:user_list')
 
 
 @login_required
 def generate_new_password(request):
+    """
+        Генерация нового пароля для пользователя.
+
+    """
     new_password = ''.join([str(random.randint(0, 9)) for _ in range(12)])
     send_mail(
         subject='Вы сменили пароль',

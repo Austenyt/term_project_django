@@ -1,6 +1,5 @@
 import logging
 from datetime import timedelta
-from email.header import Header, make_header
 from smtplib import SMTPException
 
 from django.utils import timezone
@@ -27,6 +26,10 @@ logger.addHandler(handler)
 
 @util.close_old_connections
 def send_mailing(mailing_id):
+    """
+        Отправляет рассылку по указанному идентификатору.
+
+    """
     mailing = Mailing.objects.get(pk=mailing_id)
     message = mailing.message
     clients = mailing.clients.all()
@@ -50,9 +53,17 @@ def send_mailing(mailing_id):
 
 
 class Command(BaseCommand):
+    """
+        Команда для запуска планировщика задач APScheduler для отправки рассылок.
+
+    """
     help = "Runs APScheduler for sending mailings."
 
     def handle(self, *args, **options):
+        """
+                Обработка команды.
+
+        """
         scheduler = BlockingScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
