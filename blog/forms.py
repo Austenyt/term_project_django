@@ -7,11 +7,8 @@ class StyleFormMixin:
     Миксин, добавляющий класс CSS 'form-control' к каждому полю формы.
     """
 
-    def init(self, *args, **kwargs):
-        """
-        Инициализация формы.
-        """
-        super().init(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
 

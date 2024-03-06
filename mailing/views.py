@@ -216,6 +216,12 @@ class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         'title': 'Удаление рассылки'
     }
 
+    permission_required = 'mailing.delete_mailing'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class MessageListView(LoginRequiredMixin, ListView):
     """
@@ -260,6 +266,12 @@ class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         'title': 'Создать сообщение'
     }
 
+    permission_required = 'mailing.add_message'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def test_func(self):
         return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
 
@@ -280,6 +292,12 @@ class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
         'title': 'Редактировать сообщение'
     }
 
+    permission_required = 'mailing.update_message'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
     def test_func(self):
         return self.request.user.is_authenticated  # Метод для определения авторизации пользователя
 
@@ -298,3 +316,9 @@ class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     extra_context = {
         'title': 'Удаление сообщения'
     }
+
+    permission_required = 'mailing.delete_message'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)

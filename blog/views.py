@@ -28,7 +28,7 @@ class BlogListView(LoginRequiredMixin, ListView):
         return context_data
 
 
-class BlogCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     """
         Представление для создания новой статьи блога.
     """
@@ -47,7 +47,7 @@ class BlogCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class BlogUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     """
         Представление для редактирования статьи блога.
     """
@@ -89,7 +89,7 @@ class BlogDetailView(LoginRequiredMixin, DetailView):
         return self.object
 
 
-class BlogDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     """
         Представление для удаления статьи блога.
     """
